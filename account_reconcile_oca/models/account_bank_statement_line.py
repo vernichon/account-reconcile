@@ -359,8 +359,11 @@ class AccountBankStatementLine(models.Model):
                 continue
             new_data.append(line_data)
             liquidity_amount += line_data["amount"]
+        partner = self._retrieve_partner()
+
+        partner_id = partner.id if partner else False
         for line in reconcile_model._get_write_off_move_lines_dict(
-            -liquidity_amount, self._retrieve_partner()
+            -liquidity_amount, partner_id
         ):
             new_line = line.copy()
             amount = line.get("balance")
